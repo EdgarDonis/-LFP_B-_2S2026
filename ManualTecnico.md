@@ -1,6 +1,6 @@
 # Manual Técnico
 **USAC - Ingeniería en Ciencias y Sistemas**  
-**Proyecto:** Torneo de Sudoku: Validación y Análisis de Partidas 
+**Proyecto:** Torneo de Sudoku: Validación y Análisis de Partidas  
 **Autor:** Edgar Alfredo Donis Llamas  
 **Carnet:** 202307788  
 **Laboratorio Lenguajes Formales y de Programación B+**
