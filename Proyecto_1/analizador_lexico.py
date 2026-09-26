@@ -10,6 +10,7 @@ class AnalizadorLexico:
         self.errores = []
 
         # Diccionario de palabras reservadas requeridas
+        # Diccionario de palabras reservadas requeridas y atributos
         self.reservadas = {
             "HORARIO": "PR_HORARIO", "CURSOS": "PR_CURSOS",
             "CATEDRATICOS": "PR_CATEDRATICOS", "AULAS": "PR_AULAS",
@@ -18,7 +19,12 @@ class AnalizadorLexico:
             "clase": "PR_CLASE", "con": "PR_CON", "en": "PR_EN",
             "TITULAR": "CAT_TITULAR", "INTERINO": "CAT_INTERINO", "AUXILIAR": "CAT_AUXILIAR",
             "LUNES": "DIA", "MARTES": "DIA", "MIERCOLES": "DIA",
-            "JUEVES": "DIA", "VIERNES": "DIA", "SABADO": "DIA"
+            "JUEVES": "DIA", "VIERNES": "DIA", "SABADO": "DIA",
+            # Atributos internos
+            "codigo": "ATRIBUTO", "creditos": "ATRIBUTO",
+            "categoria": "ATRIBUTO", "capacidad": "ATRIBUTO",
+            "edificio": "ATRIBUTO", "dia": "ATRIBUTO",
+            "inicio": "ATRIBUTO", "fin": "ATRIBUTO", "seccion": "ATRIBUTO"
         }
 
     def avanzar(self):
@@ -37,7 +43,7 @@ class AnalizadorLexico:
             char = self.entrada[self.posicion]
 
             # 1. Ignorar espacios en blanco, tabulaciones y retornos de carro
-            if char in " \t\r":
+            if char.isspace():
                 self.avanzar()
                 continue
 
@@ -49,7 +55,7 @@ class AnalizadorLexico:
                     self.avanzar()
                 continue
 
-            # 3. Cadenas de texto ("...")
+            # 3. Cadenas de texto ("...") y Códigos entre comillas
             if char == '"':
                 col_inicial = self.columna
                 self.avanzar()
@@ -61,13 +67,60 @@ class AnalizadorLexico:
                     self.avanzar()
 
                 if self.posicion < len(self.entrada) and self.entrada[self.posicion] == '"':
-                    self.tokens.append(Token(lexema, "CADENA", self.linea, col_inicial))
                     self.avanzar()  # Consume la comilla de cierre
+
+                    # --- LÓGICA DE VERIFICACIÓN PARA CÓDIGOS ---
+                    letras_o_digitos = 0
+                    guiones = 0
+                    espacios_u_otros = 0
+
+                    for c in lexema:
+                        if c.isalnum():
+                          letras_o_digitos += 1
+                        elif c == '-':
+                            guiones += 1
+                        else:
+                            espacios_u_otros += 1
+
+                    has_letters = False
+                    has_digits = False
+                    for c in lexema:
+                        if c.isalpha(): has_letters = True
+                        if c.isdigit(): has_digits = True
+
+                    # Es un código académico si no tiene espacios y combina letras/números o tiene un guion
+                    if espacios_u_otros == 0 and letras_o_digitos > 0 and (
+                            (has_letters and has_digits) or guiones > 0):
+                        valido = True
+                        if guiones != 1:
+                             valido = False  # Un código válido debe tener exactamente un guion
+                        else:
+                            guion_encontrado = False
+                            for c in lexema:
+                                if c == '-':
+                                    guion_encontrado = True
+                                elif guion_encontrado:
+                                    if not c.isdigit():  # Después del guion solo pueden ir dígitos
+                                        valido = False
+                                else:
+                                    if not c.isalnum():  # Antes del guion van letras/dígitos
+                                        valido = False
+
+                        if valido:
+                            self.tokens.append(Token(f'"{lexema}"', "CODIGO", self.linea, col_inicial))
+                        else:
+                            self.errores.append(
+                                ErrorLexico(f'"{lexema}"', "CODIGO_MAL_FORMADO", f"Código mal formado: '{lexema}'",
+                                            self.linea, col_inicial))
+                    else:
+                        # Si tiene espacios o no cumple la estructura mínima, es texto normal
+                        self.tokens.append(Token(f'"{lexema}"', "CADENA", self.linea, col_inicial))
                 else:
                     self.errores.append(ErrorLexico(lexema, "CADENA_SIN_CERRAR",
-                                                    f"Cadena sin cerrar iniciada en línea {self.linea}, columna {col_inicial}",
-                                                    self.linea, col_inicial))
+                        f"Cadena sin cerrar iniciada en línea {self.linea}, columna {col_inicial}",
+                                                self.linea, col_inicial))
                 continue
+
 
             # 4. Alfanuméricos: Palabras Reservadas y Códigos (Letras + guión + dígitos)
             if char.isalpha():

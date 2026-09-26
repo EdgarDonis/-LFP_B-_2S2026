@@ -9,29 +9,56 @@ class GeneradorReportes:
 
     def extraer_clases_simuladas(self):
         clases = []
+        en_seccion_clases = False
         clase_actual = {}
+        esperando_atributo = None
 
         for i, token in enumerate(self.tokens):
-            if token.tipo == 'PR_CLASE':
-                if clase_actual:
-                    clases.append(clase_actual)
-                clase_actual = {}
-            elif token.tipo == 'CODIGO':
-                if 'curso' not in clase_actual:
-                    clase_actual['curso'] = token.lexema
-                elif 'catedratico' not in clase_actual:
-                    clase_actual['catedratico'] = token.lexema
-                elif 'aula' not in clase_actual:
-                    clase_actual['aula'] = token.lexema
-            elif token.tipo == 'DIA':
-                clase_actual['dia'] = token.lexema
-            elif token.tipo == 'HORA':
-                if 'inicio' not in clase_actual:
-                    clase_actual['inicio'] = token.lexema
-                else:
-                    clase_actual['fin'] = token.lexema
+            # Solo empezamos a recolectar datos si ya llegamos al bloque CLASES
+            if token.tipo == 'PR_CLASES':
+                en_seccion_clases = True
 
-        if clase_actual:
+            elif en_seccion_clases:
+                if token.tipo == 'PR_CLASE':
+                    # Si ya teníamos una clase armada, la guardamos antes de limpiar
+                    if clase_actual and 'curso' in clase_actual:
+                        clases.append(clase_actual)
+                    clase_actual = {}
+                    esperando_atributo = None
+
+                elif token.tipo == 'ATRIBUTO':
+                    esperando_atributo = token.lexema
+
+                elif token.tipo == 'DIA':
+                    if esperando_atributo == 'dia':
+                        clase_actual['dia'] = token.lexema
+                        esperando_atributo = None
+
+                elif token.tipo == 'HORA':
+                    if esperando_atributo == 'inicio':
+                        clase_actual['inicio'] = token.lexema
+                        esperando_atributo = None
+                    elif esperando_atributo == 'fin':
+                        clase_actual['fin'] = token.lexema
+                        esperando_atributo = None
+
+                elif token.tipo in ['CODIGO', 'CADENA']:
+                    valor = token.lexema.replace('"', '')  # Limpiamos las comillas para que el HTML se vea limpio
+
+                    if esperando_atributo:
+                        clase_actual[esperando_atributo] = valor
+                        esperando_atributo = None
+                    else:
+                        # Asignación posicional: los primeros 3 valores sueltos son curso, catedrático y aula
+                        if 'curso' not in clase_actual:
+                            clase_actual['curso'] = valor
+                        elif 'catedratico' not in clase_actual:
+                            clase_actual['catedratico'] = valor
+                        elif 'aula' not in clase_actual:
+                            clase_actual['aula'] = valor
+
+        # Guardar la última clase iterada al terminar el ciclo
+        if clase_actual and 'curso' in clase_actual:
             clases.append(clase_actual)
 
         return clases
@@ -40,10 +67,14 @@ class GeneradorReportes:
         choques = []
         for i, c1 in enumerate(clases):
             for c2 in clases[i + 1:]:
-                if all(k in c1 and k in c2 for k in ('aula', 'catedratico', 'dia', 'inicio')):
+                # Verificamos que existan las llaves necesarias incluyendo 'fin'
+                if all(k in c1 and k in c2 for k in ('aula', 'catedratico', 'dia', 'inicio', 'fin')):
                     conflicto_lugar = c1['aula'] == c2['aula']
                     conflicto_docente = c1['catedratico'] == c2['catedratico']
-                    conflicto_tiempo = (c1['dia'] == c2['dia']) and (c1['inicio'] == c2['inicio'])
+
+                    # Lógica correcta de traslape: Inicio A es menor que Fin B, y Fin A es mayor que Inicio B
+                    conflicto_tiempo = (c1['dia'] == c2['dia']) and (c1['inicio'] < c2['fin']) and (
+                                c1['fin'] > c2['inicio'])
 
                     if conflicto_tiempo and (conflicto_lugar or conflicto_docente):
                         choques.append((c1, c2))

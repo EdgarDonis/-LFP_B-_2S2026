@@ -19,7 +19,7 @@ El sistema está construido bajo el paradigma de Programación Orientada a Objet
 ## 2. Autómata Finito Determinista (AFD)
 El reconocimiento de tokens se realiza mediante un AFD diseñado para evaluar la entrada carácter por carácter.
 
-![máquina de estados.png](Documentaci%C3%B3n/m%C3%A1quina%20de%20estados.png)
+![máquina de estados.png](máquina de estados.png)
 
 ### Tabla de Transiciones
 | Estado Actual | Condición (Lectura) | Estado Siguiente | Acción / Reconocimiento |
