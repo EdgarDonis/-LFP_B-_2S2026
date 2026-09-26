@@ -16,7 +16,6 @@ class AplicacionHorario:
         # Barra de botones
         frame_botones = tk.Frame(root, pady=10)
         frame_botones.pack(fill="x")
-
         tk.Button(frame_botones, text="Cargar Archivo", width=15, command=self.cargar_archivo).pack(side="left",
                                                                                                     padx=10)
         tk.Button(frame_botones, text="Analizar Léxico", width=15, bg="#4CAF50", fg="white",
