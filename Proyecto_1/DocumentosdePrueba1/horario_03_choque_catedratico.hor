@@ -1,0 +1,23 @@
+## Prueba 03 - Choque de horario por CATEDRATICO
+## Objetivo: "Otto Rodriguez" (DOC-001) tiene dos clases el mismo dia (LUNES)
+## con bloques horarios traslapados (07:00-08:40 y 08:00-09:30), en aulas distintas.
+## Resultado esperado: el sistema debe reportar 1 choque de horario por catedratico
+## y resaltar ambas celdas en el Reporte 1.
+
+HORARIO {
+    CURSOS {
+        curso: "Lenguajes Formales y de Programacion" [codigo: "LFP-0796", creditos: 4],
+        curso: "Bases de Datos 2" [codigo: "BD2-0812", creditos: 5],
+    };
+    CATEDRATICOS {
+        catedratico: "Otto Rodriguez" [codigo: "DOC-001", categoria: TITULAR],
+    };
+    AULAS {
+        aula: "A-101" [capacidad: 40, edificio: "T-3"],
+        aula: "LAB-3" [capacidad: 25, edificio: "T-5"],
+    };
+    CLASES {
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: LUNES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        clase: "BD2-0812" con "DOC-001" en "LAB-3" [dia: LUNES, inicio: 08:00, fin: 09:30, seccion: "A"],
+    };
+};

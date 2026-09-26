@@ -1,0 +1,23 @@
+## Prueba 04 - Choque de horario por AULA
+## Objetivo: el aula "A-101" tiene dos clases el mismo dia (MARTES) con bloques
+## traslapados (10:20-12:00 y 11:30-13:00), impartidas por catedraticos distintos.
+## Resultado esperado: el sistema debe reportar 1 choque de horario por aula
+## y resaltar ambas celdas en el Reporte 1.
+
+HORARIO {
+    CURSOS {
+        curso: "Redes de Computadoras" [codigo: "RED-0623", creditos: 3],
+        curso: "Sistemas Operativos 1" [codigo: "SO1-0511", creditos: 4],
+    };
+    CATEDRATICOS {
+        catedratico: "Marco Tulio Ajuchan" [codigo: "DOC-003", categoria: AUXILIAR],
+        catedratico: "Silvia Illescas" [codigo: "DOC-004", categoria: TITULAR],
+    };
+    AULAS {
+        aula: "A-101" [capacidad: 40, edificio: "T-3"],
+    };
+    CLASES {
+        clase: "RED-0623" con "DOC-003" en "A-101" [dia: MARTES, inicio: 10:20, fin: 12:00, seccion: "N"],
+        clase: "SO1-0511" con "DOC-004" en "A-101" [dia: MARTES, inicio: 11:30, fin: 13:00, seccion: "A"],
+    };
+};

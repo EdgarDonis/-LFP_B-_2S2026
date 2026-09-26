@@ -1,0 +1,17 @@
+## Prueba 09 - Estructura minima sin clases (caso borde)
+## Objetivo: validar que el sistema no falle (division por cero, listas vacias,
+## etc.) cuando no hay clases registradas. Los reportes deben generarse igual,
+## mostrando 0 en los indicadores correspondientes (KPIs, promedio de horas,
+## ocupacion de aulas).
+
+HORARIO {
+    CURSOS {
+    };
+    CATEDRATICOS {
+    };
+    AULAS {
+        aula: "A-101" [capacidad: 40, edificio: "T-3"],
+    };
+    CLASES {
+    };
+};

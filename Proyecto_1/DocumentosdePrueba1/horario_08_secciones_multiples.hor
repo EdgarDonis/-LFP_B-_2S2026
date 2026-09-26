@@ -1,0 +1,25 @@
+## Prueba 08 - Mismo curso con multiples secciones
+## Objetivo: validar que el Reporte 1 (Horario Semanal por Seccion) genere una
+## agenda separada por cada seccion detectada (N y A del mismo curso LFP-0796),
+## con distinto catedratico, aula y horario, sin que esto se confunda con un
+## choque de horario real.
+
+HORARIO {
+    CURSOS {
+        curso: "Lenguajes Formales y de Programacion" [codigo: "LFP-0796", creditos: 4],
+    };
+    CATEDRATICOS {
+        catedratico: "Otto Rodriguez" [codigo: "DOC-001", categoria: TITULAR],
+        catedratico: "Vivian Campos" [codigo: "DOC-002", categoria: INTERINO],
+    };
+    AULAS {
+        aula: "A-101" [capacidad: 40, edificio: "T-3"],
+        aula: "LAB-3" [capacidad: 25, edificio: "T-5"],
+    };
+    CLASES {
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: LUNES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        clase: "LFP-0796" con "DOC-002" en "LAB-3" [dia: LUNES, inicio: 07:00, fin: 08:40, seccion: "A"],
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: MIERCOLES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        clase: "LFP-0796" con "DOC-002" en "LAB-3" [dia: MIERCOLES, inicio: 07:00, fin: 08:40, seccion: "A"],
+    };
+};

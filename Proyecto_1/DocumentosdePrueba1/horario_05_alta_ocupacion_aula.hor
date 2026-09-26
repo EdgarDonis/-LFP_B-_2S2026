@@ -1,0 +1,34 @@
+## Prueba 05 - Aula con ocupacion mayor al 80%
+## Objetivo: el aula "LAB-1" se usa 14 horas diarias (06:00-13:00 y 13:00-20:00)
+## los 6 dias (LUNES a SABADO) = 84 horas de 90 disponibles en el rango
+## institucional (06:00-21:00 x 6 dias) = 93.3% de ocupacion.
+## Resultado esperado: LAB-1 debe aparecer resaltada en rojo en la tabla de
+## ocupacion del Reporte 3 (umbral > 80%). No hay choques de horario.
+
+HORARIO {
+    CURSOS {
+        curso: "Curso Ocupacion A" [codigo: "OCU-001", creditos: 4],
+        curso: "Curso Ocupacion B" [codigo: "OCU-002", creditos: 4],
+    };
+    CATEDRATICOS {
+        catedratico: "Docente Uno" [codigo: "DOC-101", categoria: TITULAR],
+        catedratico: "Docente Dos" [codigo: "DOC-102", categoria: INTERINO],
+    };
+    AULAS {
+        aula: "LAB-1" [capacidad: 30, edificio: "T-9"],
+    };
+    CLASES {
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: LUNES, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: LUNES, inicio: 13:00, fin: 20:00, seccion: "N"],
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: MARTES, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: MARTES, inicio: 13:00, fin: 20:00, seccion: "N"],
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: MIERCOLES, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: MIERCOLES, inicio: 13:00, fin: 20:00, seccion: "N"],
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: JUEVES, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: JUEVES, inicio: 13:00, fin: 20:00, seccion: "N"],
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: VIERNES, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: VIERNES, inicio: 13:00, fin: 20:00, seccion: "N"],
+        clase: "OCU-001" con "DOC-101" en "LAB-1" [dia: SABADO, inicio: 06:00, fin: 13:00, seccion: "N"],
+        clase: "OCU-002" con "DOC-102" en "LAB-1" [dia: SABADO, inicio: 13:00, fin: 20:00, seccion: "N"],
+    };
+};

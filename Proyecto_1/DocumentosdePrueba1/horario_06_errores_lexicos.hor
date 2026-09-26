@@ -1,0 +1,33 @@
+## Prueba 06 - Bateria de errores lexicos (modo panico)
+## Objetivo: el analizador debe detectar y acumular los 5 tipos de error definidos
+## en la seccion 4.8, sin detenerse ante el primero, y seguir tokenizando el
+## resto del archivo. Resultado esperado: 5 errores en la tabla de errores,
+## uno de cada tipo, y los tokens validos que los rodean deben seguir
+## reconociendose con normalidad.
+
+HORARIO {
+    CURSOS {
+        ## Error 1: CODIGO_MAL_FORMADO (falta el guion entre letras y digitos)
+        curso: "Lenguajes Formales y de Programacion" [codigo: "LFP0796", creditos: 4],
+        curso: "Bases de Datos 2" [codigo: "BD2-0812", creditos: 5],
+    };
+    CATEDRATICOS {
+        catedratico: "Otto Rodriguez" [codigo: "DOC-001", categoria: TITULAR],
+        catedratico: "Vivian Campos" [codigo: "DOC-002", categoria: INTERINO],
+    };
+    AULAS {
+        aula: "A-101" [capacidad: 40, edificio: "T-3"],
+    };
+    CLASES {
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: LUNES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        ## Error 2: HORA_FUERA_DE_RANGO (22:15 excede el rango institucional 06:00-21:00)
+        clase: "BD2-0812" con "DOC-002" en "A-101" [dia: MARTES, inicio: 22:15, fin: 23:00, seccion: "A"],
+        ## Error 3: DIA_NO_RECONOCIDO (DOMINGO no esta en la enumeracion LUNES..SABADO)
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: DOMINGO, inicio: 09:00, fin: 10:00, seccion: "N"],
+        ## Error 4: CARACTER_NO_RECONOCIDO (simbolo '@' no pertenece al alfabeto del lenguaje)
+        clase: "BD2-0812" con "DOC-002" en "A-101" [dia: JUEVES, inicio: 10:20 @, fin: 12:00, seccion: "A"],
+        ## Error 5: CADENA_SIN_CERRAR (la comilla de apertura no se cierra antes del salto de linea)
+        clase: "Bases de Datos 2 con "DOC-002" en "A-101" [dia: VIERNES, inicio: 07:00, fin: 08:40, seccion: "A"],
+        clase: "LFP-0796" con "DOC-001" en "A-101" [dia: SABADO, inicio: 08:00, fin: 09:40, seccion: "N"],
+    };
+};
