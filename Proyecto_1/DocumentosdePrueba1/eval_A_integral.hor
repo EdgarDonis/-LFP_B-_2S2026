@@ -1,0 +1,30 @@
+## Evaluacion oficial A - Caso integral (uso exclusivo del auxiliar/catedratico)
+HORARIO {
+    CURSOS {
+        curso: "Compiladores" [codigo: "CMP-0900", creditos: 4],
+        curso: "Arquitectura de Computadoras 1" [codigo: "ARC-0511", creditos: 3],
+        curso: "Estadistica 1" [codigo: "EST-0300", creditos: 3],
+        curso: "Compiladores 2" [codigo: "CMP0901", creditos: 3],
+    };
+    CATEDRATICOS {
+        catedratico: "Julio Reyes" [codigo: "DOC-501", categoria: TITULAR],
+        catedratico: "Mayra Pineda" [codigo: "DOC-502", categoria: AUXILIAR],
+        catedratico: "Ricardo Solares" [codigo: "DOC-503", categoria: INTERINO],
+    };
+    AULAS {
+        aula: "M-204" [capacidad: 35, edificio: "T-6"],
+        aula: "M-205" [capacidad: 35, edificio: "T-6"],
+    };
+    CLASES {
+        clase: "CMP-0900" con "DOC-501" en "M-204" [dia: LUNES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        clase: "ARC-0511" con "DOC-502" en "M-205" [dia: LUNES, inicio: 07:40, fin: 09:20, seccion: "A"],
+        clase: "EST-0300" con "DOC-501" en "M-205" [dia: MARTES, inicio: 09:00, fin: 10:40, seccion: "N"],
+        clase: "EST-0300" con "DOC-503" en "M-204" [dia: LUNES, inicio: 07:30, fin: 09:10, seccion: "B"],
+        clase: "CMP-0900" con "DOC-503" en "M-205" [dia: MIERCOLES, inicio: 08:00, fin: 09:40, seccion: "N"],
+        clase: "ARC-0511" con "DOC-503" en "M-204" [dia: MIERCOLES, inicio: 08:40, fin: 10:20, seccion: "A"],
+        clase: "ARC-0511" con "DOC-502" en "M-204" [dia: FESTIVO, inicio: 11:00, fin: 12:40, seccion: "N"],
+        clase: "EST-0300" con "DOC-502" en "M-205" [dia: JUEVES, inicio: 05:30, fin: 07:00, seccion: "A"],
+        clase: "CMP-0900" con "DOC-501" en "M-204" [dia: VIERNES, inicio: 09:00, fin: 10:40, seccion: "N" %],
+        clase: "Compiladores Avanzado con "DOC-503" en "M-205" [dia: SABADO, inicio: 07:00, fin: 08:40, seccion: "A"],
+    };
+};

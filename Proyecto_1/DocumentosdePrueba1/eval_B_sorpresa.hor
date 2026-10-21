@@ -1,0 +1,21 @@
+## Evaluacion oficial B - Caso sorpresa, compacto (uso exclusivo del auxiliar/catedratico)
+HORARIO {
+    CURSOS {
+        curso: "Teoria de la Computacion" [codigo: "TCO-0630", creditos: 3],
+        curso: "Comunicacion Oral y Escrita 2" [codigo: "0900-CMP", creditos: 2],
+    };
+    CATEDRATICOS {
+        catedratico: "Elena Ruiz" [codigo: "DOC-601", categoria: TITULAR],
+        catedratico: "Pablo Mux" [codigo: "DOC-602", categoria: INTERINO],
+    };
+    AULAS {
+        aula: "S-102" [capacidad: 20, edificio: "T-2"],
+    };
+    CLASES {
+        clase: "TCO-0630" con "DOC-601" en "S-102" [dia: LUNES, inicio: 08:00, fin: 09:40, seccion: "N"],
+        clase: "TCO-0630" con "DOC-602" en "S-102" [dia: LUNES, inicio: 09:00, fin: 10:40, seccion: "A"],
+        clase: "TCO-0630" con "DOC-601" en "S-102" [dia: MARTES, inicio: 07:00, fin: 08:40, seccion: "N"],
+        clase: "TCO-0630" con "DOC-602" en "S-102" [dia: MIERCOLES, inicio: 07:00 ~, fin: 08:40, seccion: "A"],
+        clase: "Teoria de la Computacion sin cerrar con "DOC-601" en "S-102" [dia: JUEVES, inicio: 07:00, fin: 08:40, seccion: "N"],
+    };
+};

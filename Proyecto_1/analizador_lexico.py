@@ -9,7 +9,6 @@ class AnalizadorLexico:
         self.tokens = []
         self.errores = []
 
-        # Diccionario de palabras reservadas requeridas
         # Diccionario de palabras reservadas requeridas y atributos
         self.reservadas = {
             "HORARIO": "PR_HORARIO", "CURSOS": "PR_CURSOS",
@@ -69,7 +68,7 @@ class AnalizadorLexico:
                 if self.posicion < len(self.entrada) and self.entrada[self.posicion] == '"':
                     self.avanzar()  # Consume la comilla de cierre
 
-                    # --- LÓGICA DE VERIFICACIÓN PARA CÓDIGOS ---
+                    # Lógica de verificación para códigos
                     letras_o_digitos = 0
                     guiones = 0
                     espacios_u_otros = 0
@@ -112,6 +111,7 @@ class AnalizadorLexico:
                             self.errores.append(
                                 ErrorLexico(f'"{lexema}"', "CODIGO_MAL_FORMADO", f"Código mal formado: '{lexema}'",
                                             self.linea, col_inicial))
+                            return
                     else:
                         # Si tiene espacios o no cumple la estructura mínima, es texto normal
                         self.tokens.append(Token(f'"{lexema}"', "CADENA", self.linea, col_inicial))
@@ -119,6 +119,7 @@ class AnalizadorLexico:
                     self.errores.append(ErrorLexico(lexema, "CADENA_SIN_CERRAR",
                         f"Cadena sin cerrar iniciada en línea {self.linea}, columna {col_inicial}",
                                                 self.linea, col_inicial))
+                    return
                 continue
 
 
@@ -168,6 +169,7 @@ class AnalizadorLexico:
                     self.errores.append(ErrorLexico(lexema, "DIA_NO_RECONOCIDO",
                                                     f"Día o palabra no reconocida: '{lexema}' en línea {self.linea}, columna {col_inicial}",
                                                     self.linea, col_inicial))
+                    return
                 continue
 
             # 5. Dígitos: Enteros u Horas (HH:MM)
@@ -202,29 +204,29 @@ class AnalizadorLexico:
                                 self.errores.append(ErrorLexico(lexema, "HORA_FUERA_DE_RANGO",
                                                                 f"Hora fuera de rango en línea {self.linea}, columna {col_inicial}",
                                                                 self.linea, col_inicial))
+                                return
                             else:
                                 self.tokens.append(Token(lexema, "HORA", self.linea, col_inicial))
                         else:
                             self.errores.append(ErrorLexico(lexema, "HORA_FUERA_DE_RANGO",
                                                             f"Hora fuera de rango en línea {self.linea}, columna {col_inicial}",
                                                             self.linea, col_inicial))
+                            return
                     else:
                         self.errores.append(ErrorLexico(lexema, "HORA_FUERA_DE_RANGO",
                                                         f"Hora mal estructurada en línea {self.linea}, columna {col_inicial}",
                                                         self.linea, col_inicial))
+                        return
                 else:
                     # Si no encontró ':', era simplemente un número entero (ej. capacidad del aula)
                     self.tokens.append(Token(lexema, "ENTERO", self.linea, col_inicial))
-                continue
 
             # 6. Símbolos de agrupación y sintaxis ({, }, [, ], :, ,, ;)
             if char in "{}[]:,;":
                 self.tokens.append(Token(char, "SIMBOLO", self.linea, self.columna))
-                self.avanzar()
-                continue
 
-            # 7. Modo Pánico: Carácter fuera del alfabeto
+            # 7. Carácter fuera del alfabeto
             self.errores.append(ErrorLexico(char, "CARACTER_NO_RECONOCIDO",
                                             f"Carácter no reconocido: '{char}' en línea {self.linea}, columna {self.columna}",
                                             self.linea, self.columna))
-            self.avanzar()
+            return
